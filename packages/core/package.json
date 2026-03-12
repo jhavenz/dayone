@@ -1,0 +1,9 @@
+{
+  "name": "@dayone/core",
+  "private": true,
+  "scripts": {
+    "test": "vendor/bin/pest",
+    "stan": "vendor/bin/phpstan analyse",
+    "lint": "vendor/bin/pint --test"
+  }
+}

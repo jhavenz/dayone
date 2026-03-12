@@ -1,0 +1,19 @@
+{
+  "name": "dayone",
+  "private": true,
+  "packageManager": "npm@11.6.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@dayone/api",
+    "serve": "cd apps/api && php artisan serve",
+    "test": "turbo run test",
+    "stan": "turbo run stan",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.0"
+  }
+}

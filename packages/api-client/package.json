@@ -1,0 +1,17 @@
+{
+  "name": "@dayone/client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo 'no tests yet'",
+    "generate": "echo 'Run: npx openapi-typescript <url> -o types/{slug}.d.ts'"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.0",
+    "typescript": "^5.5"
+  }
+}

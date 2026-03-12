@@ -1,0 +1,9 @@
+{
+  "name": "@dayone/types",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "echo 'generated types - no tests'",
+    "stan": "echo 'typescript types - no stan'"
+  }
+}
