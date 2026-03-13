@@ -28,14 +28,14 @@ it('resolves product from X-Product header', function () {
     $response->assertOk();
 });
 
-it('returns 404 for inactive product', function () {
+it('returns 503 for inactive product', function () {
     $this->seedProduct('Defunct', 'defunct', ['is_active' => false]);
     [$user, $token] = $this->authenticatedUser();
 
     $response = $this->withHeader('Authorization', "Bearer {$token}")
         ->getJson('/api/defunct/access/check');
 
-    $response->assertNotFound();
+    $response->assertServiceUnavailable();
 });
 
 it('returns 404 for nonexistent product slug', function () {
@@ -44,7 +44,7 @@ it('returns 404 for nonexistent product slug', function () {
     $response = $this->withHeader('Authorization', "Bearer {$token}")
         ->getJson('/api/nonexistent/access/check');
 
-    $response->assertStatus(500); // ProductNotFoundException since no product resolves
+    $response->assertNotFound();
 });
 
 it('loads product settings into config', function () {

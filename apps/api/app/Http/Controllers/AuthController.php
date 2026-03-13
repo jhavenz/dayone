@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TokenResource;
 use App\Models\User;
 use DayOne\Contracts\Auth\V1\AuthManager;
 use Illuminate\Http\JsonResponse;
@@ -33,10 +34,10 @@ final class AuthController extends Controller
 
         $tokenResult = $this->auth->issueToken($user, 'auth-token');
 
-        return response()->json([
-            'user' => $user,
-            'token' => $tokenResult->token,
-        ], 201);
+        return response()->json(
+            (new TokenResource($tokenResult, $user))->toArray($request),
+            201,
+        );
     }
 
     public function login(Request $request): JsonResponse
@@ -56,10 +57,9 @@ final class AuthController extends Controller
 
         $tokenResult = $this->auth->issueToken($user, 'auth-token');
 
-        return response()->json([
-            'user' => $user,
-            'token' => $tokenResult->token,
-        ]);
+        return response()->json(
+            (new TokenResource($tokenResult, $user))->toArray($request),
+        );
     }
 
     public function logout(Request $request): JsonResponse

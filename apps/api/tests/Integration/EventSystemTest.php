@@ -32,7 +32,7 @@ it('dispatches ProductAccessRevoked on revoke', function () {
     [$user, $token] = $this->authenticatedUser();
 
     $this->withHeader('Authorization', "Bearer {$token}")
-        ->postJson('/api/acme/access/grant');
+        ->postJson('/api/acme/access/grant', ['role' => 'admin']);
     $this->withHeader('Authorization', "Bearer {$token}")
         ->postJson('/api/acme/access/revoke');
 

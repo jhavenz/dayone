@@ -21,8 +21,12 @@ final class ResolveProductContext
     {
         $product = $this->resolver->resolve($request);
 
-        if ($product !== null && ! $product->isActive) {
+        if ($product === null && $request->route('product') !== null) {
             abort(404, 'Product not found');
+        }
+
+        if ($product !== null && ! $product->isActive) {
+            abort(503, 'Product is currently unavailable');
         }
 
         if ($product !== null) {

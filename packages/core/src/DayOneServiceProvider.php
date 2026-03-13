@@ -45,6 +45,7 @@ use DayOne\Events\SubscriptionPaused;
 use DayOne\Events\SubscriptionResumed;
 use DayOne\Events\SubscriptionTrialEnding;
 use DayOne\Events\SubscriptionUpdated;
+use DayOne\Http\Middleware\RequireProductRole;
 use DayOne\Http\Middleware\ResolveProductContext;
 use DayOne\Http\OpenApi\DayOneOpenApiExtension;
 use Dedoc\Scramble\Scramble;
@@ -84,6 +85,7 @@ final class DayOneServiceProvider extends ServiceProvider
         $kernel = $this->app->make(Kernel::class);
         $router = $this->app->make('router');
         $router->aliasMiddleware('dayone.product', ResolveProductContext::class);
+        $router->aliasMiddleware('dayone.role', RequireProductRole::class);
 
         $this->registerWebhookRoute();
         $this->registerEventListeners();

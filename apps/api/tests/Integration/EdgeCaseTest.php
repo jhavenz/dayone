@@ -69,10 +69,11 @@ it('double-grant updates role instead of duplicating', function () {
     $product = $this->seedProduct('Acme', 'acme');
     [$user, $token] = $this->authenticatedUser();
 
-    $this->withHeader('Authorization', "Bearer {$token}")
-        ->postJson('/api/acme/access/grant', ['role' => 'user']);
+    // Bootstrap with admin so second grant is authorized
     $this->withHeader('Authorization', "Bearer {$token}")
         ->postJson('/api/acme/access/grant', ['role' => 'admin']);
+    $this->withHeader('Authorization', "Bearer {$token}")
+        ->postJson('/api/acme/access/grant', ['role' => 'user']);
 
     $count = DB::table('dayone_user_products')
         ->where('user_id', $user->id)
@@ -84,7 +85,7 @@ it('double-grant updates role instead of duplicating', function () {
         ->value('role');
 
     expect($count)->toBe(1);
-    expect($role)->toBe('admin');
+    expect($role)->toBe('user');
 });
 
 it('handles concurrent product access grants', function () {

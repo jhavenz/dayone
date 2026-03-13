@@ -31,9 +31,9 @@ it('revokes product access from user', function () {
     $product = $this->seedProduct('Acme', 'acme');
     [$user, $token] = $this->authenticatedUser();
 
-    // Grant first
+    // Grant first (bootstrap with admin role so revoke is authorized)
     $this->withHeader('Authorization', "Bearer {$token}")
-        ->postJson('/api/acme/access/grant');
+        ->postJson('/api/acme/access/grant', ['role' => 'admin']);
 
     // Then revoke
     $response = $this->withHeader('Authorization', "Bearer {$token}")
@@ -91,10 +91,11 @@ it('is idempotent on double grant', function () {
     $product = $this->seedProduct('Acme', 'acme');
     [$user, $token] = $this->authenticatedUser();
 
+    // Bootstrap with admin so second grant is authorized
     $this->withHeader('Authorization', "Bearer {$token}")
-        ->postJson('/api/acme/access/grant');
+        ->postJson('/api/acme/access/grant', ['role' => 'admin']);
     $this->withHeader('Authorization', "Bearer {$token}")
-        ->postJson('/api/acme/access/grant');
+        ->postJson('/api/acme/access/grant', ['role' => 'admin']);
 
     $count = \Illuminate\Support\Facades\DB::table('dayone_user_products')
         ->where('user_id', $user->id)
@@ -121,12 +122,12 @@ it('isolates access between products', function () {
     expect($checkBeta->json('has_access'))->toBeFalse();
 });
 
-it('can revoke without prior grant', function () {
+it('returns 403 when revoking without admin role', function () {
     $this->seedProduct('Acme', 'acme');
     [$user, $token] = $this->authenticatedUser();
 
     $response = $this->withHeader('Authorization', "Bearer {$token}")
         ->postJson('/api/acme/access/revoke');
 
-    $response->assertOk();
+    $response->assertForbidden();
 });
